@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>What If? — Future Simulator</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+
+                <div>
+                    <h1>WHAT IF?</h1>
+                    <span>Future Simulator</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+
+                <p class="section-label">EXPLORE</p>
+
+                <button class="nav-item active">
+                    <span>⌁</span>
+                    Simulator
+                </button>
+
+                <button class="nav-item">
+                    <span>◈</span>
+                    Scenarios
+                </button>
+
+                <button class="nav-item">
+                    <span>◎</span>
+                    Insights
+                </button>
+
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="mini-card">
+                    <span class="mini-icon">✦</span>
+
+                    <div>
+                        <strong>Future thinking</strong>
+                        <p>Explore possibilities, not predictions.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+                    <p class="eyebrow">DECISION INTELLIGENCE</p>
+
+                    <h2>
+                        Explore what could happen.
+                    </h2>
+
+                    <p class="subtitle">
+                        Change your assumptions. Explore multiple futures.
+                    </p>
+                </div>
+
+                <button class="reset-btn" onclick="resetSimulator()">
+                    ↻ Reset
+                </button>
+
+            </header>
+
+
+            <!-- SIMULATOR -->
+            <section class="workspace">
+
+                <!-- CONTROLS -->
+                <div class="control-panel card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="label">SCENARIO BUILDER</span>
+
+                            <h3>
+                                Change your assumptions
+                            </h3>
+                        </div>
+
+                        <div class="live-dot">
+                            <span></span>
+                            LIVE
+                        </div>
+
+                    </div>
+
+
+                    <!-- INITIAL -->
+                    <div class="control">
+
+                        <div class="control-top">
+
+                            <label>
+                                Starting amount
+                            </label>
+
+                            <span id="initialValue">
+                                ₹1,00,000
+                            </span>
+
+                        </div>
+
+                        <input
+                            id="initial"
+                            type="range"
+                            min="0"
+                            max="1000000"
+                            step="10000"
+                            value="100000"
+                            oninput="updateSimulator()"
+                        >
+
+                    </div>
+
+
+                    <!-- MONTHLY -->
+                    <div class="control">
+
+                        <div class="control-top">
+
+                            <label>
+                                Monthly contribution
+                            </label>
+
+                            <span id="monthlyValue">
+                                ₹10,000
+                            </span>
+
+                        </div>
+
+                        <input
+                            id="monthly"
+                            type="range"
+                            min="1000"
+                            max="100000"
+                            step="1000"
+                            value="10000"
+                            oninput="updateSimulator()"
+                        >
+
+                    </div>
+
+
+                    <!-- RETURN -->
+                    <div class="control">
+
+                        <div class="control-top">
+
+                            <label>
+                                Annual growth
+                            </label>
+
+                            <span id="returnValue">
+                                10%
+                            </span>
+
+                        </div>
+
+                        <input
+                            id="returnRate"
+                            type="range"
+                            min="1"
+                            max="20"
+                            step="0.5"
+                            value="10"
+                            oninput="updateSimulator()"
+                        >
+
+                    </div>
+
+
+                    <!-- YEARS -->
+                    <div class="control">
+
+                        <div class="control-top">
+
+                            <label>
+                                Time horizon
+                            </label>
+
+                            <span id="yearsValue">
+                                10 years
+                            </span>
+
+                        </div>
+
+                        <input
+                            id="years"
+                            type="range"
+                            min="1"
+                            max="40"
+                            value="10"
+                            oninput="updateSimulator()"
+                        >
+
+                    </div>
+
+
+                    <button class="simulate-btn" onclick="runSimulation()">
+                        <span>Explore Future</span>
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+
+                <!-- RESULTS -->
+                <div class="results-area">
+
+                    <!-- METRICS -->
+                    <div class="metrics">
+
+                        <div class="metric-card card">
+
+                            <span class="metric-label">
+                                EXPECTED FUTURE
+                            </span>
+
+                            <strong id="expectedValue">
+                                ₹0
+                            </strong>
+
+                            <div class="metric-change positive">
+                                ↗ projected outcome
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric-card card">
+
+                            <span class="metric-label">
+                                TOTAL CONTRIBUTION
+                            </span>
+
+                            <strong id="contributionValue">
+                                ₹0
+                            </strong>
+
+                            <div class="metric-change">
+                                money invested
+                            </div>
+
+                        </div>
+
+
+                        <div class="metric-card card">
+
+                            <span class="metric-label">
+                                PROJECTED GROWTH
+                            </span>
+
+                            <strong id="growthValue">
+                                ₹0
+                            </strong>
+
+                            <div class="metric-change positive">
+                                ↗ growth generated
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CHART -->
+                    <div class="chart-card card">
+
+                        <div class="chart-header">
+
+                            <div>
+                                <span class="label">
+                                    FUTURE PROJECTION
+                                </span>
+
+                                <h3>
+                                    Multiple possible futures
+                                </h3>
+                            </div>
+
+                            <div class="legend">
+
+                                <span>
+                                    <i class="expected"></i>
+                                    Expected
+                                </span>
+
+                                <span>
+                                    <i class="conservative"></i>
+                                    Conservative
+                                </span>
+
+                                <span>
+                                    <i class="optimistic"></i>
+                                    Optimistic
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="futureChart"></canvas>
+                        </div>
+
+                    </div>
+
+
+                    <!-- FUTURES -->
+                    <div class="future-grid">
+
+                        <div class="future-card conservative-card">
+
+                            <div class="future-title">
+                                <span>◉</span>
+                                Conservative
+                            </div>
+
+                            <strong id="conservativeValue">
+                                ₹0
+                            </strong>
+
+                            <p>
+                                Lower-growth scenario
+                            </p>
+
+                        </div>
+
+
+                        <div class="future-card expected-card">
+
+                            <div class="future-title">
+                                <span>◉</span>
+                                Expected
+                            </div>
+
+                            <strong id="expectedFuture">
+                                ₹0
+                            </strong>
+
+                            <p>
+                                Base scenario
+                            </p>
+
+                        </div>
+
+
+                        <div class="future-card optimistic-card">
+
+                            <div class="future-title">
+                                <span>◉</span>
+                                Optimistic
+                            </div>
+
+                            <strong id="optimisticValue">
+                                ₹0
+                            </strong>
+
+                            <p>
+                                Higher-growth scenario
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- INSIGHTS -->
+            <section class="insights-grid">
+
+                <div class="insight-card card">
+
+                    <div class="insight-icon">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <span class="label">
+                            AI-STYLE INSIGHT
+                        </span>
+
+                        <h3 id="insightTitle">
+                            Your future is highly sensitive to time.
+                        </h3>
+
+                        <p id="insightText">
+                            Small changes in your assumptions can produce
+                            dramatically different long-term outcomes.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="impact-card card">
+
+                    <span class="label">
+                        WHAT MATTERS MOST?
+                    </span>
+
+                    <h3>
+                        Impact analysis
+                    </h3>
+
+                    <div class="impact-row">
+
+                        <span>Time horizon</span>
+
+                        <div class="bar">
+                            <div id="timeImpact"></div>
+                        </div>
+
+                        <strong id="timePercent">
+                            40%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="impact-row">
+
+                        <span>Contribution</span>
+
+                        <div class="bar">
+                            <div id="contributionImpact"></div>
+                        </div>
+
+                        <strong id="contributionPercent">
+                            35%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="impact-row">
+
+                        <span>Growth rate</span>
+
+                        <div class="bar">
+                            <div id="growthImpact"></div>
+                        </div>
+
+                        <strong id="growthPercent">
+                            25%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
